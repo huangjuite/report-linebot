@@ -125,7 +125,7 @@ function doPost(e) {
   if (userMessage === "清查") {
     var current_time = Utilities.formatDate(date, "Asia/Taipei", "MM/dd HH00");
 
-    var status = "第一班 "+current_time+" 回報\n應到13員 實到13原 發燒0員\n\n";
+    var status = "第一班 "+current_time+" 回報\n應到13員 實到13員 發燒0員\n\n";
     for (let i = 1; i <= 13; i++) {
       status += get_status(sheet, i);
     }
