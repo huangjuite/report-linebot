@@ -133,6 +133,12 @@ function doPost(e) {
     return;
   }
 
+  if (userMessage === "清查表單連結") {
+
+    send_to_line(CHANNEL_ACCESS_TOKEN, replyToken, format_text_message(sheet_url));
+    return;
+  }
+
   if (userMessage === "清查頑劣份子") {
     var marked_id = [2, 3, 4, 5, 7, 11];
     var current_time = Utilities.formatDate(date, "Asia/Taipei", "MM/dd HH00");
