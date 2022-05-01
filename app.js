@@ -7,7 +7,7 @@ function get_status(sheet, number) {
   var place = sheet.getRange(number + 1, 5).getValues()[0][0];
   var todo = sheet.getRange(number + 1, 6).getValues()[0][0];
 
-  return String(id + " 姓名 " + name + "\n電話 " + phone + "\n做什麼事 " + things + "\n地點 " + place + "\n預計 " + todo + "\n\n");
+  return String(id + " 姓名 " + name + "\n電話: " + phone + "\n做什麼事: " + things + "\n地點: " + place + "\n預計: " + todo + "\n\n");
 };
 
 function test() {
@@ -28,12 +28,11 @@ function test() {
   }
 
   console.log(status);
-  console.log(number);
 
   var date = new Date();
   var current_hour = Utilities.formatDate(date, "Asia/Taipei", "HH"); // get times
   var current_time = Utilities.formatDate(date, "Asia/Taipei", "MM/dd HH00");
-  console.log(current_date);
+  console.log(current_time);
 
 };
 
@@ -125,7 +124,7 @@ function doPost(e) {
   if (userMessage === "清查") {
     var current_time = Utilities.formatDate(date, "Asia/Taipei", "MM/dd HH00");
 
-    var status = "第一班 "+current_time+" 回報\n應到13員 實到13員 發燒0員\n\n";
+    var status = "第一班 " + current_time + " 回報\n應到13員 實到13員 發燒0員\n\n";
     for (let i = 1; i <= 13; i++) {
       status += get_status(sheet, i);
     }
@@ -134,7 +133,22 @@ function doPost(e) {
     return;
   }
 
-  if (userMessage === "reset") {
+  if (userMessage === "清查頑劣份子") {
+    var marked_id = [2, 3, 4, 5, 7, 11];
+    var current_time = Utilities.formatDate(date, "Asia/Taipei", "MM/dd HH00");
+
+    var status = "第一班 " + current_time + " 回報\n頑劣份子6員\n\n";
+    marked_id.forEach(function display_ids(item, indx) {
+      status += get_status(sheet, item);
+    });
+
+    send_to_line(CHANNEL_ACCESS_TOKEN, replyToken, format_text_message(status));
+    return;
+  }
+
+
+
+  if (userMessage === "#reset") {
     sheet.getRangeList(['D2:F14']).clear();
     send_to_line(CHANNEL_ACCESS_TOKEN, replyToken, format_text_message("data has been cleared"));
     return;
