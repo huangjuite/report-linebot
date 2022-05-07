@@ -212,8 +212,8 @@ function doPost(e) {
   }
 
   if (userMessage === "#help") {
-    var readme = "https://github.com/huangjuite/report-linebot";
-    send_to_line(CHANNEL_ACCESS_TOKEN, replyToken, format_text_message(readme));
+    var msg = "README:\nhttps://github.com/huangjuite/report-linebot\n\ngoogle sheet:\nhttps://docs.google.com/spreadsheets/d/1NQtJHJxXxg5WS3XAJ7gejJVOB_zvhhNe2T0_KwJ_s9o/edit?usp=sharing";
+    send_to_line(CHANNEL_ACCESS_TOKEN, replyToken, format_text_message(msg));
     return;
   }
 
@@ -233,8 +233,19 @@ function doPost(e) {
   // -------------------------------------------------------------------------------------
   if (userMessage === "清查") {
     var current_time = Utilities.formatDate(date, "Asia/Taipei", "MM/dd HH00");
+    var notdone = [];
+    for (let i = 1; i <= 13; i++) {
+      if (sheet.getRange(i + 1, 4).getValues()[0][0] == "") {
+        notdone.push(String(i) + " ");
+      }
+    }
 
-    var status = "第一班 " + current_time + " 回報\n應到13員 實到13員 發燒0員\n\n";
+    var status = "第一班 " + current_time + " 回報\n應到13員 實到" + (13 - notdone.length) + "員 發燒0員\n";
+    if (notdone.length != 0) {
+      status += "缺：" + notdone + "\n";
+    }
+
+    status += "\n";
     for (let i = 1; i <= 13; i++) {
       status += get_status(sheet, i);
     }
@@ -281,7 +292,6 @@ function doPost(e) {
   sheet.getRange(userNumber + 1, 6).setValue(todo);
   sheet.getRange(userNumber + 1, 7).setValue(userId);
 
-
   for (let i = 1; i <= 13; i++) {
     if (sheet.getRange(i + 1, 4).getValues()[0][0] == "") {
       // not done
@@ -289,7 +299,7 @@ function doPost(e) {
     }
   }
 
-  // all done
+  // all set
   var current_time = Utilities.formatDate(date, "Asia/Taipei", "MM/dd HH00");
   var status = "第一班 " + current_time + " 回報\n應到13員 實到13員 發燒0員\n\n";
   for (let i = 1; i <= 13; i++) {
