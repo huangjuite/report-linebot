@@ -18,6 +18,7 @@
 | --------------------- | ---------------------------- |
 | 回報 doing place todo | 回報內容                     |
 | 清查                  | 顯示所有人狀態               |
-| 清查表單連結          | 顯示資料暫存表單連結         |
 | 清查頑劣份子          | just try it                  |
+| #alarm HHmm           | set reminder time            |
 | #reset                | clear status in google sheet |
+| #help                 | README.md                    |
