@@ -49,16 +49,14 @@ function broadcast_report_alert() {
   var status = String(current_time) + "回報，報告班長，一班應到13員，實到" + (13 - notdone.length) + "員，";
   if (notdone.length != 0) {
     status += tag_name;
-    status += "未完成回報，";
+    status += "未完成回報，報告完畢";
+    var report_msg = format_text_message(status);
+    push_to_line(CHANNEL_ACCESS_TOKEN, report_msg);
   }
   else {
     return;
   }
 
-  status += "報告完畢";
-
-  var report_msg = format_text_message(status);
-  push_to_line(CHANNEL_ACCESS_TOKEN, report_msg);
 }
 
 function set_trigger(hhmm) {
@@ -226,6 +224,11 @@ function doPost(e) {
     }
 
     send_to_line(CHANNEL_ACCESS_TOKEN, replyToken, format_text_message("alarm " + reply_message + "set"));
+    return;
+  }
+
+  if (userMessage === "#acknowledgement") {
+    send_to_line(CHANNEL_ACCESS_TOKEN, replyToken, format_text_message("In remember of that rediculous April 2022.\n\t\t\t\tJui-Te Huang"));
     return;
   }
 
